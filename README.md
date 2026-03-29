@@ -33,15 +33,9 @@ The smart contract is written in Solidity and follows the ERC-20 standard using 
 ```
 contracts/
  └── PanjoCoin.sol
-```
+The smart contract was deployed using Remix IDE.
 
 ## Deployment
-
-The contract can be deployed on the Polygon network using tools like:
-
-* Hardhat
-* Truffle
-* Remix
 
 ## Security
 
