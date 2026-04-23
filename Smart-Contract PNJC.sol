@@ -2,32 +2,22 @@
 pragma solidity ^0.8.26;
 
 /*//////////////////////////////////////////////////////////////
-                     INTERFACES & BASE LOGIC
+                AUDIT & INVESTOR NOTES
+//////////////////////////////////////////////////////////////
+
+✔ ERC20 standard token
+✔ Fixed supply (no mint after deployment)
+✔ Burnable (deflationary)
+✔ Allowance control (increase/decrease)
+✔ EIP-2612 Permit (gasless approvals)
+✔ No owner / no admin (fully trustless)
+
+Security Model:
+- Fully deterministic ERC20 logic
+- No upgradeability
+- No hidden fees or blacklists
+
 //////////////////////////////////////////////////////////////*/
-
-/**
- * @dev Interface of the ERC20 standard as defined in the EIP.
- */
-interface IERC20 {
-    function totalSupply() external view returns (uint256);
-    function balanceOf(address account) external view returns (uint256);
-    function transfer(address to, uint256 amount) external returns (bool);
-    function allowance(address owner, address spender) external view returns (uint256);
-    function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address from, address to, uint256 amount) external returns (bool);
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-}
-
-/**
- * @dev Interface for the optional metadata functions from the ERC20 standard.
- */
-interface IERC20Metadata is IERC20 {
-    function name() external view returns (string memory);
-    function symbol() external view returns (string memory);
-    function decimals() external view returns (uint8);
-}
 
 abstract contract Context {
     function _msgSender() internal view virtual returns (address) {
@@ -36,126 +26,186 @@ abstract contract Context {
 }
 
 /*//////////////////////////////////////////////////////////////
-                         EIP-712 & PERMIT
+                        ERC20 CORE
 //////////////////////////////////////////////////////////////*/
 
-/**
- * @dev Implementation of the EIP712 domain separator for signed typed data.
- */
-abstract contract EIP712 {
+contract ERC20 is Context {
+
+    mapping(address => uint256) internal _balances;
+    mapping(address => mapping(address => uint256)) internal _allowances;
+
+    uint256 internal _totalSupply;
+    string internal _name;
+    string internal _symbol;
+
+    constructor(string memory name_, string memory symbol_) {
+        _name = name_;
+        _symbol = symbol_;
+    }
+
+    function name() public view returns (string memory) { return _name; }
+    function symbol() public view returns (string memory) { return _symbol; }
+    function decimals() public pure returns (uint8) { return 18; }
+
+    function totalSupply() public view returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
+    }
+
+    function transfer(address to, uint256 value) public returns (bool) {
+        _transfer(_msgSender(), to, value);
+        return true;
+    }
+
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return _allowances[owner][spender];
+    }
+
+    function approve(address spender, uint256 value) public returns (bool) {
+        _approve(_msgSender(), spender, value);
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 value) public returns (bool) {
+        uint256 current = _allowances[from][_msgSender()];
+        require(current >= value, "ALLOWANCE_LOW");
+
+        unchecked {
+            _approve(from, _msgSender(), current - value);
+        }
+
+        _transfer(from, to, value);
+        return true;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        ALLOWANCE CONTROL
+    //////////////////////////////////////////////////////////////*/
+
+    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, _allowances[owner][spender] + addedValue);
+        return true;
+    }
+
+    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+        address owner = _msgSender();
+        uint256 current = _allowances[owner][spender];
+        require(current >= subtractedValue, "ALLOWANCE_UNDERFLOW");
+
+        unchecked {
+            _approve(owner, spender, current - subtractedValue);
+        }
+
+        return true;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                            INTERNAL LOGIC
+    //////////////////////////////////////////////////////////////*/
+
+    function _transfer(address from, address to, uint256 value) internal {
+        require(from != address(0), "FROM_ZERO");
+        require(to != address(0), "TO_ZERO");
+
+        uint256 bal = _balances[from];
+        require(bal >= value, "BALANCE_LOW");
+
+        unchecked {
+            _balances[from] = bal - value;
+        }
+
+        _balances[to] += value;
+
+        emit Transfer(from, to, value);
+    }
+
+    function _mint(address account, uint256 value) internal {
+        require(account != address(0), "MINT_ZERO");
+
+        _totalSupply += value;
+        _balances[account] += value;
+
+        emit Transfer(address(0), account, value);
+    }
+
+    function _burn(address account, uint256 value) internal {
+        require(account != address(0), "BURN_ZERO");
+
+        uint256 bal = _balances[account];
+        require(bal >= value, "BURN_EXCEEDS");
+
+        unchecked {
+            _balances[account] = bal - value;
+            _totalSupply -= value;
+        }
+
+        emit Transfer(account, address(0), value);
+    }
+
+    function _approve(address owner, address spender, uint256 value) internal {
+        require(owner != address(0), "OWNER_ZERO");
+        require(spender != address(0), "SPENDER_ZERO");
+
+        _allowances[owner][spender] = value;
+        emit Approval(owner, spender, value);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                            EVENTS
+    //////////////////////////////////////////////////////////////*/
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
+
+/*//////////////////////////////////////////////////////////////
+                        EIP-2612 PERMIT
+//////////////////////////////////////////////////////////////*/
+
+contract ERC20Permit is ERC20 {
+
+    mapping(address => uint256) public nonces;
+
     bytes32 private immutable _DOMAIN_SEPARATOR;
     uint256 private immutable _CACHED_CHAIN_ID;
 
-    constructor(string memory name, string memory version) {
-        _CACHED_CHAIN_ID = block.chainid;
-        _DOMAIN_SEPARATOR = _buildDomainSeparator(name, version);
-    }
+    bytes32 private constant PERMIT_TYPEHASH =
+        keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
 
-    function _buildDomainSeparator(string memory name, string memory version) private view returns (bytes32) {
-        return keccak256(
+    constructor(string memory name, string memory symbol)
+        ERC20(name, symbol)
+    {
+        _CACHED_CHAIN_ID = block.chainid;
+
+        _DOMAIN_SEPARATOR = keccak256(
             abi.encode(
-                keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
+                keccak256("EIP712Domain(string name,string version,uint256 chainid,address verifyingContract)"),
                 keccak256(bytes(name)),
-                keccak256(bytes(version)),
+                keccak256(bytes("1")),
                 block.chainid,
                 address(this)
             )
         );
     }
 
-    /**
-     * @dev Returns the domain separator for the current chain.
-     */
     function DOMAIN_SEPARATOR() public view returns (bytes32) {
-        return block.chainid == _CACHED_CHAIN_ID ? _DOMAIN_SEPARATOR : _buildDomainSeparator("PanjoCoin", "1");
-    }
-}
-
-/*//////////////////////////////////////////////////////////////
-                        MAIN ERC20 LOGIC
-//////////////////////////////////////////////////////////////*/
-
-contract PanjoCoin is Context, IERC20, IERC20Metadata, EIP712 {
-    mapping(address => uint256) internal _balances;
-    mapping(address => mapping(address => uint256)) internal _allowances;
-    mapping(address => uint256) public nonces;
-
-    uint256 private _totalSupply;
-    
-    // Token Constants
-    string private constant _NAME = "PanjoCoin";
-    string private constant _SYMBOL = "PNJC";
-    uint256 public constant MAX_SUPPLY = 1_000_000_000_000 * 10**18;
-
-    // EIP-2612 Permit Typehash
-    bytes32 private constant PERMIT_TYPEHASH = 
-        keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
-
-    event Burn(address indexed from, uint256 amount);
-    event InitialDistribution(address indexed wallet, uint256 amount);
-
-    /**
-     * @dev Sets the initial supply and assigns it to the distribution wallet.
-     * @param distributionWallet The address receiving the total supply.
-     */
-    constructor(address distributionWallet) EIP712(_NAME, "1") {
-        require(distributionWallet != address(0), "INVALID_WALLET");
-
-        _totalSupply = MAX_SUPPLY;
-        _balances[distributionWallet] = MAX_SUPPLY;
-
-        emit Transfer(address(0), distributionWallet, MAX_SUPPLY);
-        emit InitialDistribution(distributionWallet, MAX_SUPPLY);
+        return block.chainid == _CACHED_CHAIN_ID
+            ? _DOMAIN_SEPARATOR
+            : keccak256(
+                abi.encode(
+                    keccak256("EIP712Domain(string name,string version,uint256 chainid,address verifyingContract)"),
+                    keccak256(bytes(_name)),
+                    keccak256(bytes("1")),
+                    block.chainid,
+                    address(this)
+                )
+            );
     }
 
-    /*--- Standard Getters ---*/
-
-    function name() public pure override returns (string memory) { return _NAME; }
-    function symbol() public pure override returns (string memory) { return _SYMBOL; }
-    function decimals() public pure override returns (uint8) { return 18; }
-    function totalSupply() public view override returns (uint256) { return _totalSupply; }
-    function balanceOf(address account) public view override returns (uint256) { return _balances[account]; }
-
-    /**
-     * @dev Basic transfer function.
-     */
-    function transfer(address to, uint256 amount) public override returns (bool) {
-        _transfer(_msgSender(), to, amount);
-        return true;
-    }
-
-    function allowance(address owner, address spender) public view override returns (uint256) {
-        return _allowances[owner][spender];
-    }
-
-    /**
-     * @dev Approval mechanism for third-party spending.
-     */
-    function approve(address spender, uint256 amount) public override returns (bool) {
-        _approve(_msgSender(), spender, amount);
-        return true;
-    }
-
-    /**
-     * @dev Transfer from one account to another using the allowance mechanism.
-     */
-    function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
-        uint256 currentAllowance = _allowances[from][_msgSender()];
-        if (currentAllowance != type(uint256).max) {
-            require(currentAllowance >= amount, "ALLOWANCE_LOW");
-            unchecked {
-                _approve(from, _msgSender(), currentAllowance - amount);
-            }
-        }
-        _transfer(from, to, amount);
-        return true;
-    }
-
-    /*--- Permit (EIP-2612) ---*/
-
-    /**
-     * @dev Allows gasless approval via EIP-712 signatures.
-     */
     function permit(
         address owner,
         address spender,
@@ -165,63 +215,44 @@ contract PanjoCoin is Context, IERC20, IERC20Metadata, EIP712 {
         bytes32 r,
         bytes32 s
     ) external {
-        require(block.timestamp <= deadline, "PERMIT_EXPIRED");
+        require(block.timestamp <= deadline, "EXPIRED");
 
-        uint256 nonce;
-        unchecked {
-            nonce = nonces[owner]++;
-        }
+        uint256 nonce = nonces[owner]++;
 
-        bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, nonce, deadline));
-        bytes32 digest = keccak256(abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR(), structHash));
+        bytes32 structHash = keccak256(
+            abi.encode(PERMIT_TYPEHASH, owner, spender, value, nonce, deadline)
+        );
 
-        address signer = ecrecover(digest, v, r, s);
-        require(signer != address(0) && signer == owner, "INVALID_SIGNATURE");
+        bytes32 digest = keccak256(
+            abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR(), structHash)
+        );
+
+        address recovered = ecrecover(digest, v, r, s);
+        require(recovered == owner && recovered != address(0), "INVALID_SIGNATURE");
 
         _approve(owner, spender, value);
     }
+}
 
-    /*--- Token Burning ---*/
+/*//////////////////////////////////////////////////////////////
+                        FINAL TOKEN
+//////////////////////////////////////////////////////////////*/
 
-    /**
-     * @dev Permanently destroys 'amount' of tokens from the caller's balance.
-     */
+contract PanjoCoin is ERC20Permit {
+
+    uint256 public constant MAX_SUPPLY = 1_000_000_000_000 * 10**18;
+
+    event Burn(address indexed from, uint256 amount);
+
+    constructor(address distributionWallet)
+        ERC20Permit("PanjoCoin", "PNJC")
+    {
+        require(distributionWallet != address(0), "ZERO_WALLET");
+        _mint(distributionWallet, MAX_SUPPLY);
+    }
+
     function burn(uint256 amount) external {
-        address account = _msgSender();
-        uint256 accountBalance = _balances[account];
-        require(accountBalance >= amount, "BURN_EXCEEDS_BALANCE");
-
-        unchecked {
-            _balances[account] = accountBalance - amount;
-            _totalSupply -= amount;
-        }
-
-        emit Burn(account, amount);
-        emit Transfer(account, address(0), amount);
-    }
-
-    /*--- Internal Helpers ---*/
-
-    function _transfer(address from, address to, uint256 amount) internal {
-        require(from != address(0), "FROM_ZERO");
-        require(to != address(0), "TO_ZERO");
-
-        uint256 fromBalance = _balances[from];
-        require(fromBalance >= amount, "TRANSFER_EXCEEDS_BALANCE");
-
-        unchecked {
-            _balances[from] = fromBalance - amount;
-        }
-        _balances[to] += amount;
-
-        emit Transfer(from, to, amount);
-    }
-
-    function _approve(address owner, address spender, uint256 amount) internal {
-        require(owner != address(0), "OWNER_ZERO");
-        require(spender != address(0), "SPENDER_ZERO");
-
-        _allowances[owner][spender] = amount;
-        emit Approval(owner, spender, amount);
+        _burn(_msgSender(), amount);
+        emit Burn(_msgSender(), amount);
     }
 }
