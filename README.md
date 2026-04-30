@@ -1,7 +1,3 @@
-Вот **усиленный, “institutional-grade” README**, выровненный под единую архитектуру проекта, без противоречий и с формулировками, которые обычно проходят первичный screening у аудиторов уровня CertiK и CEX-инфраструктуры.
-
----
-
 # 🚀 PanjoCoin (PNJC)
 
 **A cultural Web3 asset with fixed-supply token architecture and off-chain real-world social impact integration**
