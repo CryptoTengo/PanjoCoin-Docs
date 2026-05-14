@@ -15,7 +15,7 @@
 // @audit - Input validation in constructor
 // @audit - Linear vesting with cliff, mathematically precise
 
-pragma solidity 0.8.34;
+pragma solidity 0.8.24;
 
 // ============================================================
 // OPENZEPPELIN IMPORTS (audited and battle-tested)
