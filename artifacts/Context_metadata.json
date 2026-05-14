@@ -1,0 +1,47 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Smart-Contract/PanjoCoin.sol": "Context"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": [
+			":@openzeppelin/contracts/=@openzeppelin/contracts@5.6.0/"
+		]
+	},
+	"sources": {
+		"Smart-Contract/PanjoCoin.sol": {
+			"keccak256": "0x2638275f43d96dad1a0fd7c66f7aea22bca0f3cae65e0d37825f4579b3061ec4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5cf0e2e97adbfa1d9b59b697cd656a7108af5f74d95c941125c75110b839a934",
+				"dweb:/ipfs/QmVFeFo7LrD5ZxjEnneq3e4J79MHWh73XZwiqZwC9PB1ke"
+			]
+		}
+	},
+	"version": 1
+}

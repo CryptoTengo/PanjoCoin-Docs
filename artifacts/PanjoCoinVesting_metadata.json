@@ -1,0 +1,642 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_beneficiary",
+						"type": "address"
+					},
+					{
+						"internalType": "contract IERC20",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_totalAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_start",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_cliffDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_vestingDuration",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "OwnableInvalidOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "OwnableUnauthorizedAccount",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ReentrancyGuardReentrantCall",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "SafeERC20FailedOperation",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "EmergencyWithdrawn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "beneficiary",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "TokensReleased",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "beneficiary",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "claim",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "cliff",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "_otherToken",
+						"type": "address"
+					}
+				],
+				"name": "emergencyWithdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getContractBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getCurrentTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getLockedTokens",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "releasable",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "released",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "start",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "token",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vestedAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vestingDuration",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "PanjoCoin Team",
+			"details": "Vesting contract for PanjoCoin (PNJC) tokens with cliff + linear release. Security highlights:      - All critical parameters are immutable (cannot be changed after deployment)      - ReentrancyGuard protects the claim function      - SafeERC20 prevents token transfer issues      - No backdoors or admin overrides for vested tokens Typical use cases in PanjoCoin:      - Team vesting: cliff 12 months, vesting 36 months      - Treasury vesting: cliff 3 months, vesting 24 months      - Founder vesting: cliff 12 months, vesting 36 months      - Marketing vesting: cliff 0 months, vesting 12 months",
+			"errors": {
+				"OwnableInvalidOwner(address)": [
+					{
+						"details": "The owner is not a valid owner account. (eg. `address(0)`)"
+					}
+				],
+				"OwnableUnauthorizedAccount(address)": [
+					{
+						"details": "The caller account is not authorized to perform an operation."
+					}
+				],
+				"ReentrancyGuardReentrantCall()": [
+					{
+						"details": "Unauthorized reentrant call."
+					}
+				],
+				"SafeERC20FailedOperation(address)": [
+					{
+						"details": "An operation with an ERC-20 token failed."
+					}
+				]
+			},
+			"events": {
+				"EmergencyWithdrawn(address,uint256)": {
+					"params": {
+						"amount": "Amount of tokens withdrawn",
+						"token": "Address of the token that was withdrawn"
+					}
+				},
+				"TokensReleased(address,uint256)": {
+					"params": {
+						"amount": "Amount of tokens claimed",
+						"beneficiary": "Address that received the tokens"
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"claim()": {
+					"details": "Claim all currently available tokensUses nonReentrant modifier to prevent reentrancy attacks Execution flow:      1. Verify caller is the beneficiary      2. Calculate claimable amount      3. Verify amount > 0      4. Update state (released += amount)      5. Transfer tokens to beneficiary      6. Emit event The checks-effects-interactions pattern is followed:      - State is updated before external call (safeTransfer)      - This prevents reentrancy even without the modifier"
+				},
+				"constructor": {
+					"details": "Deploys the vesting contract and immediately locks the tokens Requirements:      - _beneficiary cannot be address(0)      - _token cannot be address(0)      - _totalAmount must be greater than 0      - _cliffDuration must be less than or equal to _vestingDuration      - The deployer must have approved this contract to spend _totalAmount tokens Example for Team Vesting (12 month cliff, 36 month vesting):      _beneficiary = teamMultisigAddress      _start = block.timestamp + 365 days      _cliffDuration = 365 days      _vestingDuration = 1095 days (3 years)",
+					"params": {
+						"_beneficiary": "The address that will receive the vested tokens",
+						"_cliffDuration": "Duration of the cliff period in seconds",
+						"_start": "Timestamp (UNIX seconds) when vesting begins",
+						"_token": "The ERC20 token address (PanjoCoin contract address)",
+						"_totalAmount": "Total amount of tokens to vest (with decimals, e.g., 1e18 for 1 token)",
+						"_vestingDuration": "Total vesting duration in seconds "
+					}
+				},
+				"emergencyWithdraw(address)": {
+					"details": "Withdraw ANY OTHER token accidentally sent to this contractSecurity guarantee:      - The function explicitly checks that _otherToken is NOT the vesting token      - Even if the check fails, safeTransfer would fail because the contract owns no PNJC Requirements:      - Only the contract owner can call this function      - The token to withdraw cannot be the vesting token      - The contract must have a balance of the token to withdraw",
+					"params": {
+						"_otherToken": "The ERC20 token to withdraw "
+					}
+				},
+				"getContractBalance()": {
+					"details": "Returns the total balance of tokens held by this contract",
+					"returns": {
+						"_0": "uint256 Current token balance"
+					}
+				},
+				"getCurrentTime()": {
+					"details": "Returns the current block timestamp",
+					"returns": {
+						"_0": "uint256 Current timestamp in UNIX seconds"
+					}
+				},
+				"getLockedTokens()": {
+					"details": "Returns the amount of tokens still locked (not yet claimable)",
+					"returns": {
+						"_0": "uint256 Amount of locked tokens"
+					}
+				},
+				"owner()": {
+					"details": "Returns the address of the current owner."
+				},
+				"releasable()": {
+					"details": "Calculates the amount of tokens currently available to claimReturns 0 if no tokens are available to claim",
+					"returns": {
+						"_0": "uint256 Amount that can be claimed now (vested - already claimed) "
+					}
+				},
+				"renounceOwnership()": {
+					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+				},
+				"transferOwnership(address)": {
+					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				},
+				"vestedAmount()": {
+					"details": "Calculates the total amount of tokens that have vested so farMathematical formula:      if block.timestamp < cliff:                                    return 0      if block.timestamp >= start + vestingDuration:                 return totalAmount      else:                                                          return totalAmount * (block.timestamp - cliff) / vestingDuration The calculation uses integer math with multiplication before division      to maintain maximum precision. No floating point is used.",
+					"returns": {
+						"_0": "uint256 Amount vested (includes already claimed tokens) "
+					}
+				}
+			},
+			"stateVariables": {
+				"beneficiary": {
+					"details": "Must be a non-zero address, typically a multisig wallet"
+				},
+				"cliff": {
+					"details": "cliff = start + cliffDuration"
+				},
+				"released": {
+					"details": "Increases each time claim() is calledCannot exceed totalAmount"
+				},
+				"start": {
+					"details": "If start > block.timestamp, cliff period is active"
+				},
+				"token": {
+					"details": "This is the token that will be released over time"
+				},
+				"totalAmount": {
+					"details": "This is the maximum that can ever be claimed"
+				},
+				"vestingDuration": {
+					"details": "After start + vestingDuration, all tokens are vested"
+				}
+			},
+			"title": "PanjoCoinVesting",
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"EmergencyWithdrawn(address,uint256)": {
+					"notice": "Emitted when owner withdraws a non-vested token sent by mistake"
+				},
+				"TokensReleased(address,uint256)": {
+					"notice": "Emitted when beneficiary successfully claims tokens"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"beneficiary()": {
+					"notice": "Address that can claim vested tokens (cannot be changed)"
+				},
+				"claim()": {
+					"notice": "Can be called multiple times; only the beneficiary can call"
+				},
+				"cliff()": {
+					"notice": "Timestamp (UNIX seconds) when cliff ends and first tokens become available"
+				},
+				"emergencyWithdraw(address)": {
+					"notice": "This function exists to rescue tokens that were sent to this contract by mistakeThis CANNOT be used to withdraw the vested token (PanjoCoin PNJC) "
+				},
+				"getContractBalance()": {
+					"notice": "Should equal totalAmount - released under normal conditions"
+				},
+				"getCurrentTime()": {
+					"notice": "Useful for off-chain verification of vesting progress"
+				},
+				"getLockedTokens()": {
+					"notice": "Locked tokens = totalAmount - vestedAmount (NOT totalAmount - released)"
+				},
+				"releasable()": {
+					"notice": "This is the amount that would be transferred if claim() is called"
+				},
+				"released()": {
+					"notice": "Amount of tokens already claimed by the beneficiary"
+				},
+				"start()": {
+					"notice": "Timestamp (UNIX seconds) when vesting starts"
+				},
+				"token()": {
+					"notice": "The ERC20 token being vested (PanjoCoin PNJC)"
+				},
+				"totalAmount()": {
+					"notice": "Total amount of tokens locked in this contract"
+				},
+				"vestedAmount()": {
+					"notice": "Vested amount is calculated as:         - 0% before cliff         - Linear from 0% to 100% between cliff and start+vestingDuration         - 100% after start+vestingDuration "
+				},
+				"vestingDuration()": {
+					"notice": "Duration of the linear vesting period in seconds"
+				}
+			},
+			"notice": "This contract implements a standard vesting schedule where:         - Tokens are completely locked during the cliff period         - After cliff, tokens unlock linearly over the vesting duration         - Only the beneficiary can claim tokens         - The owner can only rescue non-PNJC tokens sent by mistake ",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Smart-Contracts/PNJC_Vesting+Cliff.sol": "PanjoCoinVesting"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": [
+			":@openzeppelin/contracts/=@openzeppelin/contracts@5.6.0/"
+		]
+	},
+	"sources": {
+		"@openzeppelin/contracts@5.6.0/access/Ownable.sol": {
+			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
+				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/interfaces/IERC1363.sol": {
+			"keccak256": "0xd5ea07362ab630a6a3dee4285a74cf2377044ca2e4be472755ad64d7c5d4b69d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://da5e832b40fc5c3145d3781e2e5fa60ac2052c9d08af7e300dc8ab80c4343100",
+				"dweb:/ipfs/QmTzf7N5ZUdh5raqtzbM11yexiUoLC9z3Ws632MCuycq1d"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/interfaces/IERC165.sol": {
+			"keccak256": "0x0afcb7e740d1537b252cb2676f600465ce6938398569f09ba1b9ca240dde2dfc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1c299900ac4ec268d4570ecef0d697a3013cd11a6eb74e295ee3fbc945056037",
+				"dweb:/ipfs/Qmab9owJoxcA7vJT5XNayCMaUR1qxqj1NDzzisduwaJMcZ"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/interfaces/IERC20.sol": {
+			"keccak256": "0x1a6221315ce0307746c2c4827c125d821ee796c74a676787762f4778671d4f44",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1bb2332a7ee26dd0b0de9b7fe266749f54820c99ab6a3bcb6f7e6b751d47ee2d",
+				"dweb:/ipfs/QmcRWpaBeCYkhy68PR3B4AgD7asuQk7PwkWxrvJbZcikLF"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/token/ERC20/IERC20.sol": {
+			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
+				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/token/ERC20/utils/SafeERC20.sol": {
+			"keccak256": "0x304d732678032a9781ae85c8f204c8fba3d3a5e31c02616964e75cfdc5049098",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://299ced486011781dc98f638059678323c03079fefae1482abaa2135b22fa92d0",
+				"dweb:/ipfs/QmbZNbcPTBxNvwChavN2kkZZs7xHhYL7mv51KrxMhsMs3j"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/utils/Context.sol": {
+			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
+				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/utils/ReentrancyGuard.sol": {
+			"keccak256": "0xa516cbf1c7d15d3517c2d668601ce016c54395bf5171918a14e2686977465f53",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1e1d079e8edfb58efd23a311e315a4807b01b5d1cf153f8fa2d0608b9dec3e99",
+				"dweb:/ipfs/QmTBExeX2SDTkn5xbk5ssbYSx7VqRp9H4Ux1CY4uQM4b9N"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/utils/StorageSlot.sol": {
+			"keccak256": "0xcf74f855663ce2ae00ed8352666b7935f6cddea2932fdf2c3ecd30a9b1cd0e97",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9f660b1f351b757dfe01438e59888f31f33ded3afcf5cb5b0d9bf9aa6f320a8b",
+				"dweb:/ipfs/QmarDJ5hZEgBtCmmrVzEZWjub9769eD686jmzb2XpSU1cM"
+			]
+		},
+		"@openzeppelin/contracts@5.6.0/utils/introspection/IERC165.sol": {
+			"keccak256": "0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://971f954442df5c2ef5b5ebf1eb245d7105d9fbacc7386ee5c796df1d45b21617",
+				"dweb:/ipfs/QmadRjHbkicwqwwh61raUEapaVEtaLMcYbQZWs9gUkgj3u"
+			]
+		},
+		"Smart-Contracts/PNJC_Vesting+Cliff.sol": {
+			"keccak256": "0x0037a8cc02dfcd2b42ea8c0489e883439de1f006e27631996e04993b4342d100",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a1660e0c37c5bfde8ee0bea3ff2acfd81c0be3bbbce04f2e85d49e92c75fc4f5",
+				"dweb:/ipfs/QmayDfmhVWQ4N78wCGsWHXhKvhvLG1XU9qniB5Y126oodt"
+			]
+		}
+	},
+	"version": 1
+}
