@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.34+commit.80d5c536"
+		"version": "0.8.24+commit.e11b9ed9"
 	},
 	"language": "Solidity",
 	"output": {
@@ -805,11 +805,11 @@
 			]
 		},
 		"Smart-Contracts/PNJC_Free_Router.sol": {
-			"keccak256": "0xbdc56d49e3b59305e790d245470056984e2e5d1688fb7236672e51095abdf33d",
+			"keccak256": "0xbe35595db44f91e765c931af2544eff06bb35a43572927c5731f84dc197e5bc1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7c4f442ca51c9443e15cba2ab4eb2c0022c1811df229b469c147b0c0899307ab",
-				"dweb:/ipfs/QmP6GRfw4rHBSmphf4qufsksJR4soXoWrZ4Tj4nr1fW6VA"
+				"bzz-raw://650abc37d65bb7539443756144477ef89b1266d55f1ade191482c24c3ab0dc87",
+				"dweb:/ipfs/QmNuwRZdSCk1KLfGkVdrtT3XUUL9LkRkg97krDpRgVwAKL"
 			]
 		}
 	},

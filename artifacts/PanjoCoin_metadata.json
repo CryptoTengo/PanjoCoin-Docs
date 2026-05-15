@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.34+commit.80d5c536"
+		"version": "0.8.24+commit.e11b9ed9"
 	},
 	"language": "Solidity",
 	"output": {
@@ -944,11 +944,11 @@
 			]
 		},
 		"Smart-Contracts/PNJC.sol": {
-			"keccak256": "0x2c20b72840c5ae72be4988f11204fab16d198d436750b13575402b214c3e1035",
+			"keccak256": "0xbe7381cb0d71d1c069f5b42353f4c66e6263e3eeed7015c3b4e43607d21f89ac",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cdeb516b40f1a7e603b65a9118aee179754662d38c0f41139bce272e08b74f93",
-				"dweb:/ipfs/QmSwJzmj7rRvzEP9USpq9kYRN98QKYn71cVvhUeCZNWKLD"
+				"bzz-raw://a4d95055247802fe2f774d82a47784cfb8247abf62f5a197d681b15f21cdfdb7",
+				"dweb:/ipfs/QmRHwyT6qzo4MXJcRfydQaE2jpvB2LXhPChhSUNHTpWbzx"
 			]
 		}
 	},

@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.34+commit.80d5c536"
+		"version": "0.8.24+commit.e11b9ed9"
 	},
 	"language": "Solidity",
 	"output": {
@@ -535,7 +535,7 @@
 		"compilationTarget": {
 			"Smart-Contracts/PNJC_Vesting+Cliff.sol": "PanjoCoinVesting"
 		},
-		"evmVersion": "paris",
+		"evmVersion": "cancun",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -630,11 +630,11 @@
 			]
 		},
 		"Smart-Contracts/PNJC_Vesting+Cliff.sol": {
-			"keccak256": "0x0037a8cc02dfcd2b42ea8c0489e883439de1f006e27631996e04993b4342d100",
+			"keccak256": "0x309d5fe1542f69080640605dfcdd4700621f45c316f2c63114aa2d6265a8bbfe",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a1660e0c37c5bfde8ee0bea3ff2acfd81c0be3bbbce04f2e85d49e92c75fc4f5",
-				"dweb:/ipfs/QmayDfmhVWQ4N78wCGsWHXhKvhvLG1XU9qniB5Y126oodt"
+				"bzz-raw://d677ead9075fad198c0973225bb62b8f781c4a6098efa4e8bacb586cf39003a1",
+				"dweb:/ipfs/QmSwXnCnadfH6T36L1cM1fSLPGkn5Lt3nVsbTYo7h8CrkJ"
 			]
 		}
 	},

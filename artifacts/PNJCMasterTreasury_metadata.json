@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.34+commit.80d5c536"
+		"version": "0.8.24+commit.e11b9ed9"
 	},
 	"language": "Solidity",
 	"output": {
@@ -480,11 +480,11 @@
 			]
 		},
 		"Smart-Contracts/PNJC_Multisig.sol": {
-			"keccak256": "0xbd3e14c3005c2b7d56db0f9cab91f1e7c799c5db88826d2ba213357a85e6f42c",
+			"keccak256": "0x77be0f613785d13aea3453c234aba9310c83cbc753c5304703a8749328045f8c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7fe2ecedcb1ef278fd87fa792680478b81991c972b866e8c7358d9ac5a6d47ff",
-				"dweb:/ipfs/QmeiugZ5SnwKeQyVsKmAmFNMM24XdAewXpiRVu6xXBx8NU"
+				"bzz-raw://905a6d717bb11ee5d5939b386940973774e5faaa3a770b9c07f453a90434d14c",
+				"dweb:/ipfs/QmdKuh2mSxc4Se7x1zhN4a68aikX5mLCrrUKanLBw7hjc5"
 			]
 		}
 	},
